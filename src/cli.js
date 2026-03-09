@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const { actionLabel, getCurrentLidAction, setLidAction, toggleLidAction } = require("./powercfg");
+const { playModeSound } = require("./sound");
 
 async function run() {
   const command = (process.argv[2] || "status").toLowerCase();
@@ -17,18 +18,21 @@ async function run() {
     console.log(
       `Antes AC/DC=${result.previous.ac}/${result.previous.dc}. Ahora AC/DC=${result.current.ac}/${result.current.dc} (${actionLabel(result.current.ac)}).`
     );
+    playModeSound(result.current.ac);
     return;
   }
 
   if (command === "on" || command === "sleep") {
     const state = await setLidAction(1);
     console.log(`Suspension al cerrar tapa activada. AC/DC=${state.ac}/${state.dc}.`);
+    playModeSound(1);
     return;
   }
 
   if (command === "off" || command === "no-sleep") {
     const state = await setLidAction(0);
     console.log(`Suspension al cerrar tapa desactivada. AC/DC=${state.ac}/${state.dc}.`);
+    playModeSound(0);
     return;
   }
 

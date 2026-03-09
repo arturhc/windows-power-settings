@@ -9,6 +9,11 @@ El cambio se activa con una hotkey global:
 
 - `Ctrl + Shift + Alt + L`
 
+Feedback sonoro (automatico):
+
+- Al quedar en `Suspender`: reproduce `C:\Windows\Media\chimes.wav`.
+- Al quedar en `No hacer nada`: reproduce `C:\Windows\Media\chord.wav`.
+
 ## Por que no es un servicio clasico de Windows
 
 Un servicio real corre en `Session 0` y no recibe teclado global del usuario.  
@@ -53,6 +58,7 @@ Ese comando:
 
 - `src/main.js`: agente principal; recibe eventos de hotkey y hace toggle.
 - `src/powercfg.js`: wrapper de `powercfg` para leer/escribir `LIDACTION`.
+- `src/sound.js`: reproduce sonido distinto segun el modo activo.
 - `scripts/hotkey-listener.ps1`: registro de hotkey global con `RegisterHotKey`.
 - `scripts/start-agent.vbs`: launcher oculto del agente (sin ventana de consola).
 - `scripts/install-service.ps1`: instalacion de tarea programada.
@@ -95,5 +101,9 @@ schtasks /Query /TN "\PowerLidToggleAgent" /V /FO LIST
   - usa la tarea instalada (`npm run install-service`), que arranca oculta.
 - Si en log aparece `ERROR:REGISTER_FAILED:1409`:
   - la hotkey ya esta tomada por otro proceso; cierra la app conflictiva o cambia la combinacion.
+- Si no escuchas sonidos:
+  - revisa volumen y mezclador de Windows para `Windows PowerShell`/`Node.js`,
+  - valida que existan `C:\Windows\Media\chimes.wav` y `C:\Windows\Media\chord.wav`,
+  - prueba manual: `powershell -NoProfile -Command \"(New-Object System.Media.SoundPlayer 'C:\\Windows\\Media\\chimes.wav').PlaySync()\"`.
 - Si `powercfg` falla por permisos:
   - vuelve a instalar con PowerShell/terminal como administrador.

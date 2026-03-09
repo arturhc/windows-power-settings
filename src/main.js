@@ -5,6 +5,7 @@ const readline = require("node:readline");
 
 const { actionLabel, getCurrentLidAction, toggleLidAction } = require("./powercfg");
 const logger = require("./logger");
+const { playModeSound } = require("./sound");
 
 const HOTKEY_SCRIPT = path.resolve(__dirname, "..", "scripts", "hotkey-listener.ps1");
 const LOCK_PATH = path.join(logger.baseDir, "agent.lock");
@@ -96,6 +97,7 @@ async function onHotkey() {
       `Toggle OK. Antes AC/DC=${result.previous.ac}/${result.previous.dc}. ` +
         `Ahora AC/DC=${result.current.ac}/${result.current.dc} (${actionLabel(result.current.ac)}).`
     );
+    playModeSound(result.current.ac);
   } catch (error) {
     logger.error(`Error al aplicar toggle: ${error.message}`);
   } finally {
