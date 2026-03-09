@@ -1,0 +1,14 @@
+{
+  "name": "power-settings",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Toggle de suspension al cerrar la tapa con hotkey global en Windows.",
+  "scripts": {
+    "start": "node src/main.js",
+    "status": "node src/cli.js status",
+    "toggle": "node src/cli.js toggle",
+    "install-service": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/install-service.ps1",
+    "uninstall-service": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/uninstall-service.ps1",
+    "setup": "npm install && npm run install-service"
+  }
+}
